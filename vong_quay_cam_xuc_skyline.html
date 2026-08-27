@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Vòng quay cảm xúc - Sky-Line</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    overflow:hidden;
+}
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(135deg,#fff8e8,#edf7f1);
+    color:#377d77;
+}
+
+/* =========================
+   PHẦN CHÍNH
+========================= */
+
+.wrap{
+    text-align:center;
+    padding:30px 20px;
+    width:min(1180px,100%);
+}
+
+.scene{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:28px;
+    margin-top:10px;
+}
+
+.mascot-side{
+    width:250px;
+    flex:0 0 250px;
+    align-self:flex-end;
+    transform:translateY(-18px);
+}
+
+.mascot-side img{
+    width:100%;
+    height:auto;
+    display:block;
+    object-fit:contain;
+    filter:drop-shadow(0 12px 10px rgba(0,0,0,.12));
+}
+
+.wheel-column{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+h1{
+    font-size:38px;
+    margin:0 0 8px;
+}
+
+.subtitle{
+    font-size:18px;
+    color:#6d8d87;
+    margin-bottom:20px;
+}
+
+/* =========================
+   KHUNG VÒNG QUAY
+========================= */
+
+.game{
+    position:relative;
+    width:610px;
+    height:620px;
+    margin:auto;
+}
+
+/* Kim chỉ */
+
+.pointer{
+    position:absolute;
+    z-index:30;
+    top:-8px;
+    left:50%;
+    transform:translateX(-50%);
+    width:72px;
+    height:92px;
+    border-radius:38px 38px 18px 18px;
+    background:linear-gradient(#ffd84f,#f3a91f);
+    border:6px solid #f4bd28;
+    box-shadow:0 5px 0 #d58a16,0 8px 16px rgba(0,0,0,.18);
+}
+
+.pointer::before{
+    content:"♥";
+    position:absolute;
+    inset:11px 10px auto;
+    height:42px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:24px;
+    background:#55c9c2;
+    color:#ffe067;
+    font-size:26px;
+    border:4px solid #fff0a0;
+}
+
+.pointer::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    bottom:-28px;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:18px solid transparent;
+    border-right:18px solid transparent;
+    border-top:30px solid #e39a27;
+}
+
+/* =========================
+   VÒNG QUAY
+========================= */
+
+.wheel{
+    width:540px;
+    height:540px;
+    position:relative;
+    margin:38px auto 0;
+    border-radius:50%;
+    background:
+        conic-gradient(
+            #ffe27e 0deg 24deg,
+            #f8a5b1 24deg 48deg,
+            #83d6cb 48deg 72deg,
+            #b9de7a 72deg 96deg,
+            #76bff0 96deg 120deg,
+            #f0b5e7 120deg 144deg,
+            #f79c90 144deg 168deg,
+            #b8df7c 168deg 192deg,
+            #7cc4ef 192deg 216deg,
+            #ffe181 216deg 240deg,
+            #76d5c6 240deg 264deg,
+            #f7aaa4 264deg 288deg,
+            #c59ee3 288deg 312deg,
+            #83c6ee 312deg 336deg,
+            #f4c678 336deg 360deg
+        );
+    border:12px solid #fff9df;
+    box-shadow:
+        0 0 0 10px #52c2bd,
+        0 0 0 18px #d8fbf7,
+        0 18px 35px rgba(0,0,0,.16);
+    transition:transform 5s cubic-bezier(.12,.68,.12,1);
+}
+
+.wheel::before{
+    content:"";
+    position:absolute;
+    inset:-17px;
+    border-radius:50%;
+    z-index:2;
+    pointer-events:none;
+    background:repeating-conic-gradient(
+        from -4deg,
+        transparent 0deg 9deg,
+        #fff8aa 9deg 10.8deg,
+        transparent 10.8deg 18deg
+    );
+    -webkit-mask:radial-gradient(circle,transparent 0 92%,#000 92% 100%);
+    mask:radial-gradient(circle,transparent 0 92%,#000 92% 100%);
+    filter:drop-shadow(0 0 4px #fff6a6);
+}
+
+.wheel::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    pointer-events:none;
+    background:radial-gradient(circle at 35% 25%,rgba(255,255,255,.24),transparent 35%);
+}
+
+.wheel-stand{
+    position:absolute;
+    left:50%;
+    bottom:5px;
+    transform:translateX(-50%);
+    width:420px;
+    height:92px;
+    border-radius:48px 48px 24px 24px;
+    background:linear-gradient(#59c8c2,#38a9a5);
+    border:8px solid #2a9e9b;
+    box-shadow:0 10px 18px rgba(0,0,0,.12);
+    z-index:-1;
+}
+
+.wheel-stand::before{
+    content:"";
+    position:absolute;
+    left:70px;
+    right:70px;
+    top:-20px;
+    height:55px;
+    background:#45b5af;
+    border-radius:40px 40px 8px 8px;
+    border:6px solid #2a9e9b;
+}
+
+/* =========================
+   ẢNH CẢM XÚC TRÊN VÒNG QUAY
+========================= */
+
+.emotion{
+    position:absolute;
+
+    width:76px;
+    height:76px;
+
+    left:50%;
+    top:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    transform-origin:center;
+}
+
+/* Ảnh bạn tự thay */
+
+.emotion img{
+    width:100%;
+    height:100%;
+
+    object-fit:contain;
+
+    pointer-events:none;
+
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.15));
+}
+
+/* Khi chưa có ảnh */
+
+.emotion .placeholder{
+    width:62px;
+    height:62px;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    background:#ffffffdd;
+
+    border:3px dashed #64bdb7;
+
+    font-weight:bold;
+    font-size:13px;
+
+    color:#438f8a;
+}
+
+/* =========================
+   TÂM VÒNG QUAY
+========================= */
+
+.center{
+    position:absolute;
+
+    top:50%;
+    left:50%;
+
+    transform:translate(-50%,-50%);
+
+    z-index:15;
+
+    width:126px;
+    height:126px;
+
+    border-radius:50%;
+
+    background:linear-gradient(#50c9c1,#259e99);
+
+    border:10px solid #ffd85c;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:45px;
+
+    box-shadow:0 5px 0 #d7a32b,0 9px 22px rgba(0,0,0,.22);
+}
+
+/* =========================
+   NÚT QUAY
+========================= */
+
+button{
+    border:0;
+    border-radius:50px;
+
+    padding:16px 45px;
+
+    margin-top:20px;
+
+    background:linear-gradient(#ffd64a,#ff9f16);
+
+    color:#177f84;
+
+    font-size:19px;
+    font-weight:bold;
+
+    cursor:pointer;
+
+    box-shadow:0 6px 0 #dd8910,0 10px 18px rgba(0,0,0,.12);
+    border:5px solid #fff4be;
+
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+button:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+    transform:none;
+}
+
+/* =========================
+   POPUP KẾT QUẢ
+========================= */
+
+.overlay{
+    display:none;
+
+    position:fixed;
+    inset:0;
+
+    z-index:100;
+
+    background:#3d554e66;
+
+    backdrop-filter:blur(6px);
+
+    justify-content:center;
+    align-items:center;
+
+    padding:20px;
+}
+
+.overlay.show{
+    display:flex;
+}
+
+.result{
+    background:#fffdf6;
+
+    border-radius:32px;
+
+    padding:35px;
+
+    max-width:570px;
+    width:100%;
+
+    text-align:center;
+
+    box-shadow:0 25px 70px #0003;
+
+    animation:pop .4s ease;
+}
+
+@keyframes pop{
+    from{
+        transform:scale(.7);
+        opacity:0;
+    }
+
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+
+/* Ảnh kết quả */
+
+.resultImage{
+    width:190px;
+    height:190px;
+
+    object-fit:contain;
+
+    margin:auto;
+
+    display:block;
+
+    filter:drop-shadow(0 8px 8px rgba(0,0,0,.12));
+}
+
+.result h2{
+    font-size:30px;
+
+    margin:10px 0 18px;
+
+    color:#378b84;
+}
+
+/* .content{
+    background:#f0f7ef;
+
+    border-radius:22px;
+
+    padding:22px;
+
+    font-size:20px;
+
+    line-height:1.55;
+
+    color:#526d68;
+} */
+
+.again{
+    background:#e2b16d;
+
+    font-size:16px;
+
+    padding:13px 32px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:650px){
+
+    .scene{
+        gap:0;
+    }
+
+    .mascot-side{
+        display:none;
+    }
+
+    .wheel-column{
+        width:100%;
+    }
+
+    h1{
+        font-size:28px;
+    }
+
+    .subtitle{
+        font-size:15px;
+    }
+
+    .game{
+        width:360px;
+        height:400px;
+    }
+
+    .wheel{
+        width:330px;
+        height:330px;
+
+        border-width:8px;
+    }
+
+    .emotion{
+        width:48px;
+        height:48px;
+    }
+
+    .emotion .placeholder{
+        width:42px;
+        height:42px;
+        font-size:9px;
+    }
+
+    .center{
+        width:80px;
+        height:80px;
+
+        border-width:6px;
+
+        font-size:30px;
+    }
+
+    .pointer{
+        border-left-width:18px;
+        border-right-width:18px;
+        border-top-width:45px;
+    }
+
+    .resultImage{
+        width:250px;
+        height:250px;
+    }
+
+    .content{
+        font-size:17px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+    <h1>💛 VÒNG QUAY CẢM XÚC 💛</h1>
+
+    <div class="subtitle">
+        Con hãy quay thử xem cảm xúc hôm nay sẽ đưa con đến thử thách nào nhé!
+    </div>
+
+    <div class="scene">
+
+
+
+        <div class="wheel-column">
+            <div class="game">
+
+                <div class="pointer"></div>
+
+                <div class="wheel" id="wheel">
+
+                    <!-- 15 ảnh sẽ được JavaScript tự động đưa vào đây -->
+
+                    <div class="center">💛</div>
+
+                </div>
+
+                <div class="wheel-stand"></div>
+
+            </div>
+
+            <button id="spin" onclick="spin()">
+                🎡 QUAY NGAY
+            </button>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     POPUP KẾT QUẢ
+========================= -->
+
+<div class="overlay" id="overlay">
+
+    <div class="result">
+
+        <img
+            class="resultImage"
+            id="resultImage"
+            src=""
+            alt=""
+        >
+
+        <h2 id="resultTitle"></h2>
+
+        <div
+            class="content"
+            id="resultContent">
+        </div>
+
+        <button
+            class="again"
+            onclick="closeResult()">
+            💫 QUAY LẠI
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   15 SẮC THÁI CẢM XÚC
+
+   Bạn chỉ cần:
+   1. Thêm ảnh vào thư mục images
+   2. Đổi image thành đúng tên file của bạn
+   3. Sửa message nếu muốn
+===================================================== */
+
+const data = [
+
+    {
+        title:"VUI VẺ",
+
+        image:"images/01-vui-ve.png",
+
+        // message:
+        // "Con hãy kể cho Ba/Mẹ một điều khiến con vui nhất hôm nay."
+    },
+
+    {
+        title:"YÊU THƯƠNG",
+
+        image:"images/02-yeu-thuong.png",
+
+        // message:
+        // "Con hãy dành cho Ba/Mẹ một cái ôm thật chặt và nói một điều con yêu Ba/Mẹ."
+    },
+
+    {
+        title:"PHẤN KHÍCH",
+
+        image:"images/03-phan-khich.png",
+
+        // message:
+        // "Hôm nay có điều gì làm con cảm thấy thật phấn khích? Hãy kể cho Ba/Mẹ nghe nhé!"
+    },
+
+    {
+        title:"TỰ TIN",
+
+        image:"images/04-tu-tin.png",
+
+        // message:
+        // "Con hãy kể một việc mà con cảm thấy mình có thể làm thật tốt."
+    },
+
+    {
+        title:"BẤT NGỜ",
+
+        image:"images/05-bat-ngo.png",
+
+        // message:
+        // "Con hãy kể cho Ba/Mẹ một điều bất ngờ mà con đã gặp hôm nay."
+    },
+
+    {
+        title:"BUỒN NGỦ",
+
+        image:"images/06-buon-ngu.png",
+
+        // message:
+        // "Khi cảm thấy buồn ngủ hoặc mệt, con nghĩ cơ thể đang muốn nhắn điều gì với con?"
+    },
+
+    {
+        title:"THẮC MẮC",
+
+        image:"images/07-thac-mac.png",
+
+        // message:
+        // "Có điều gì hôm nay khiến con tò mò hoặc muốn hỏi Ba/Mẹ không?"
+    },
+
+    {
+        title:"NGẠI NGÙNG",
+
+        image:"images/08-ngai-ngung.png",
+
+        // message:
+        // "Con hãy kể một tình huống khiến con cảm thấy hơi ngại hoặc xấu hổ."
+    },
+
+    {
+        title:"BUỒN BÃ",
+
+        image:"images/09-buon-ba.png",
+
+        // message:
+        // "Khi con buồn, con muốn Ba/Mẹ làm gì để giúp con cảm thấy tốt hơn?"
+    },
+
+    {
+        title:"GIẬN DỮ",
+
+        image:"images/10-gian-du.png",
+
+        // message:
+        // "Khi tức giận, con thường cảm thấy như thế nào? Điều gì có thể giúp con bình tĩnh lại?"
+    },
+
+    {
+        title:"HÀO HỨNG",
+
+        image:"images/11-hao-hung.png",
+
+        // message:
+        // "Có điều gì sắp tới khiến con cảm thấy thật hào hứng không? Hãy kể cho Ba/Mẹ nhé!"
+    },
+
+    {
+        title:"BÌNH YÊN",
+
+        image:"images/12-binh-yen.png",
+
+        // message:
+        // "Con hãy nghĩ về một nơi hoặc một khoảnh khắc khiến con cảm thấy thật bình yên."
+    },
+
+    {
+        title:"QUYẾT TÂM",
+
+        image:"images/13-quyet-tam.png",
+
+        // message:
+        // "Con đang muốn cố gắng hoàn thành điều gì? Hãy nói một lời quyết tâm của con."
+    },
+
+    {
+        title:"DỊU DÀNG",
+
+        image:"images/14-diu-dang.png",
+
+        // message:
+        // "Hôm nay con hãy nói một lời thật dịu dàng hoặc tử tế với một người trong gia đình."
+    },
+
+    {
+        title:"THOẢI MÁI",
+
+        image:"images/15-thoai-mai.png",
+
+        // message:
+        // "Điều gì giúp con cảm thấy thoải mái và dễ chịu nhất sau một ngày dài?"
+    }
+
+];
+
+
+/* =====================================================
+   TỰ ĐỘNG TẠO 15 HÌNH TRÊN VÒNG QUAY
+===================================================== */
+
+const wheel = document.getElementById("wheel");
+
+const total = data.length;
+
+/*
+   Khoảng cách từ tâm đến vị trí ảnh.
+   Wheel desktop = 520px
+*/
+
+const radius = 202;
+
+
+/*
+   Tạo từng nhân vật
+*/
+
+data.forEach((item,index)=>{
+
+    const angle = (360 / total) * index;
+
+    const holder = document.createElement("div");
+
+    holder.className = "emotion";
+
+
+    /*
+        0 độ đặt ở phía trên.
+
+        rotate(angle)
+        translateY(-radius)
+
+        đưa ảnh chạy quanh tâm vòng tròn.
+    */
+
+    holder.style.transform =
+
+        `translate(-50%,-50%)
+         rotate(${angle}deg)
+         translateY(-${radius}px)
+         rotate(${-angle}deg)`;
+
+
+    const img = document.createElement("img");
+
+    img.src = item.image;
+
+    img.alt = item.title;
+
+
+    /*
+        Nếu ảnh chưa tồn tại thì hiện số vị trí
+        để website vẫn chạy bình thường.
+    */
+
+    img.onerror = function(){
+
+        this.style.display="none";
+
+        const placeholder =
+            document.createElement("div");
+
+        placeholder.className="placeholder";
+
+        placeholder.textContent=index+1;
+
+        holder.appendChild(placeholder);
+
+    };
+
+
+    holder.appendChild(img);
+
+    wheel.appendChild(holder);
+
+});
+
+
+/* =====================================================
+   QUAY VÒNG QUAY
+===================================================== */
+
+let rotation = 0;
+
+let busy = false;
+
+
+/*
+   Mỗi ô:
+
+   360 / 15 = 24 độ
+*/
+
+const sectionAngle = 360 / total;
+
+
+function spin(){
+
+    if(busy) return;
+
+
+    busy = true;
+
+    document.getElementById("spin").disabled = true;
+
+
+    /*
+        Random từ 0 -> 14
+    */
+
+    const index =
+        Math.floor(Math.random() * total);
+
+
+    /*
+        Đưa tâm của ô được chọn
+        đến vị trí kim chỉ ở 12 giờ.
+
+        Có cộng nửa góc ô để kim
+        chỉ đúng vào giữa ô.
+    */
+
+    const target =
+        360
+        -
+        (index * sectionAngle)
+        -
+        (sectionAngle / 2);
+
+
+    /*
+        Thêm 6 vòng quay
+    */
+
+    rotation +=
+        (360 * 6)
+        +
+        target;
+
+
+    wheel.style.transform =
+        `rotate(${rotation}deg)`;
+
+
+    /*
+        Sau animation 5 giây
+        hiển thị kết quả.
+    */
+
+    setTimeout(()=>{
+
+        showResult(index);
+
+        busy=false;
+
+        document.getElementById("spin").disabled=false;
+
+    },5100);
+
+}
+
+
+/* =====================================================
+   HIỂN THỊ KẾT QUẢ
+===================================================== */
+
+function showResult(index){
+
+    const item = data[index];
+
+
+    const resultImage =
+        document.getElementById("resultImage");
+
+
+    resultImage.src =
+        item.image;
+
+
+    resultImage.alt =
+        item.title;
+
+
+    document.getElementById(
+        "resultTitle"
+    ).textContent =
+        item.title;
+
+
+    document.getElementById(
+        "resultContent"
+    ).textContent =
+        item.message;
+
+
+    document.getElementById(
+        "overlay"
+    ).classList.add("show");
+
+}
+
+
+/* =====================================================
+   ĐÓNG POPUP
+===================================================== */
+
+function closeResult(){
+
+    document
+        .getElementById("overlay")
+        .classList.remove("show");
+
+}
+
+
+/* Click ra ngoài popup để đóng */
+
+document
+.getElementById("overlay")
+.addEventListener("click",function(e){
+
+    if(e.target === this){
+
+        closeResult();
+
+    }
+
+});
+
+
+/* =========================
+   ĐIỀU KHIỂN BÀN PHÍM / CHUỘT
+   - Space: quay
+   - Enter: đóng bảng kết quả
+   - Cuộn chuột: khóa trang, không làm giao diện dịch chuyển
+========================= */
+document.addEventListener("keydown", function(e){
+    if(e.code === "Space"){
+        e.preventDefault();
+        if(!document.getElementById("overlay").classList.contains("show")){
+            spin();
+        }
+    }
+
+    if(e.key === "Enter"){
+        if(document.getElementById("overlay").classList.contains("show")){
+            e.preventDefault();
+            closeResult();
+        }
+    }
+});
+
+/* Cố định màn hình khi lăn con lăn chuột */
+window.addEventListener("wheel", function(e){
+    e.preventDefault();
+}, { passive:false });
+
+</script>
+
+</body>
+</html>
